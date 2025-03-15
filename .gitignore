@@ -1,0 +1,63 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+**/bin/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+*.cov
+coverage.txt
+
+# Go specific
+*.o
+*.a
+_obj
+_test
+vendor/
+# Uncomment if you want to commit your vendor directory
+# !vendor/
+
+# Dependency directories (remove the comment below if you want to check in vendor/)
+# vendor/
+
+# Output directories
+dist/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Go workspace file
+go.work
+
+# Build files
+build/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+test.go
+.pre-commit-config.yaml
+go.sum
