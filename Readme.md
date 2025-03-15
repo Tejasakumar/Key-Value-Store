@@ -35,7 +35,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/KVS.git
+git clone https://github.com/Tejasakumar/Key-Value-Store.git
 cd KVS
 
 # Run the interactive CLI
