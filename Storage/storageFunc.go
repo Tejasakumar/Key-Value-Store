@@ -3,8 +3,8 @@ package Storage
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -64,7 +64,7 @@ func (db *Db) Setttl(key string, ttl int) error {
 		return err
 	}
 	ttlData := &TTL{
-		key: &key,
+		key: key,
 		Data: data,
 		ttl: time.Now().Add(time.Duration(ttl) * time.Second),
 	}
@@ -97,19 +97,21 @@ func (db *Db) Rmttl(key string) error {
 	return nil
 }
 
-func (db *Db) Updatettldb(key string, ttl int) {
+func (db *Db) Updatettldb(key string, ttl int)string {
 	db.tdb.mu.Lock()
 	defer db.tdb.mu.Unlock()
 	db.tdb.Store[key].ttl = time.Now().Add(time.Duration(ttl) * time.Second)
 	db.link.Delete(key)
 	db.link.Add(db.tdb.Store[key])
+	return "TTL updated for key: "+key +" to "+ strconv.Itoa(ttl)
 
 }
 
-func (db *Db) RemoveTTL(key string) {
+func (db *Db) RemoveTTL(key string) string {
 	fmt.Println("Removing ttl for key: "+key)
 	db.Rmttl(key)
 	db.link.Delete(key)
+	return "TTL removed for key: "+key
 }
 
 func (db *Db) DropDb() {
@@ -119,8 +121,10 @@ func (db *Db) DropDb() {
 	db.link.Tail = nil
 }
 
-func (db *Db) Keys() {
+func (db *Db) Keys() []string{
+	result := make([]string, 0)
 	for key := range db.ddb.Store {
-		fmt.Println(key)
+		result = append(result, key)
 	}
+	return result
 }

@@ -51,7 +51,7 @@ func (l *LinkedList) Delete(key string) {
 		l.Head = nil
 		l.Tail = nil
 		return
-	} else if (*temp.Value.key == key) {
+	} else if (temp.Value.key == key) {
 		l.Head = temp.Next
 		temp.Next = nil
 		temp = nil
@@ -59,7 +59,7 @@ func (l *LinkedList) Delete(key string) {
 	}
 	for temp != nil && temp.Next != nil {
 		fmt.Println("Checking if key: "+key+" is in linked list")
-		if temp.Next.Value.key == &key {
+		if temp.Next.Value.key == key {
 			val := temp.Next
 			temp.Next = temp.Next.Next
 			val.Next = nil
@@ -74,14 +74,16 @@ func (l *LinkedList) Delete(key string) {
 	
 }
 
-func (db *Db) List() {
+func (db *Db) List() map[string]string {
 	db.link.mu.RLock()
 	defer db.link.mu.RUnlock()
 	temp := db.link.Head
+	result := make(map[string]string)
 	for temp != nil {
-		fmt.Println("Key : "+(*temp.Value.key)+" Expires in : "+time.Until(temp.Value.ttl).String())
+		result[temp.Value.key] = db.ddb.Store[temp.Value.key].Data.(string)
 		temp = temp.Next
 	}
+	return result
 }
 
 func (db *Db) DropLink() {
@@ -103,7 +105,7 @@ func (l *LinkedList) AutoSweep(ttldb *TTLDB, db *Db) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for temp != nil && temp.Value.ttl.Before(time.Now()) {
-		go db.Rmttl(*temp.Value.key)
+		go db.Rmttl(temp.Value.key)
 		temp.Value.Data = nil
 		temp = temp.Next
 	}

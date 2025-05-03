@@ -20,7 +20,7 @@ type DataDb struct {
 }
 
 type TTL struct {
-	key *string
+	key string
 	Data *Data
 	ttl time.Time
 }
