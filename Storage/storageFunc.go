@@ -11,7 +11,7 @@ import (
 func (db *Db) Get(key string) (*Data, error) {
 	db.ddb.mu.RLock()
 	data, ok := db.ddb.Store[key]
-	db.ddb.mu.RUnlock()
+	defer db.ddb.mu.RUnlock()
 	if !ok {
 		return nil, errors.New("data not found")
 	}
@@ -32,12 +32,13 @@ func (db *Db) Put(key string, value interface{}) (string, interface{}) {
 
 func (db *Db) Delete(key string) error {
 	db.ddb.mu.Lock()
+	defer db.ddb.mu.Unlock()
 	_, ok := db.ddb.Store[key]
 	if !ok {
 		return errors.New("data not found")
 	}
 	delete(db.ddb.Store, key)
-	db.ddb.mu.Unlock()
+	
 	return nil
 }
 
