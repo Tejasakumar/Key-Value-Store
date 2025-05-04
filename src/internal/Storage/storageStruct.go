@@ -20,9 +20,9 @@ type DataDb struct {
 }
 
 type TTL struct {
-	key string
+	key  string
 	Data *Data
-	ttl time.Time
+	ttl  time.Time
 }
 
 type TTLDB struct {
@@ -31,24 +31,23 @@ type TTLDB struct {
 }
 
 type Db struct {
-
-	ddb		*DataDb
-	tdb		*TTLDB
-	link	*LinkedList
+	ddb  *DataDb
+	tdb  *TTLDB
+	link *LinkedList
 }
 
 func GetDb(name string) *Db {
 	db := &Db{
-			ddb: &DataDb{
-				Store: make(map[string]*Data),
-			},
-			tdb: &TTLDB{
-				Store: make(map[string]*TTL),
-			},
-			link: &LinkedList{
-				Head: nil,
-				Tail: nil,
-			},
+		ddb: &DataDb{
+			Store: make(map[string]*Data),
+		},
+		tdb: &TTLDB{
+			Store: make(map[string]*TTL),
+		},
+		link: &LinkedList{
+			Head: nil,
+			Tail: nil,
+		},
 	}
 	go db.link.Sweep(db.tdb, db)
 	return db

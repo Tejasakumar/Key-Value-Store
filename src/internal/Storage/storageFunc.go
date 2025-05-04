@@ -3,9 +3,9 @@ package Storage
 import (
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"strconv"
 	"time"
-	"github.com/google/uuid"
 )
 
 func (db *Db) Get(key string) (*Data, error) {
@@ -23,11 +23,11 @@ func (db *Db) Put(key string, value interface{}) (string, interface{}) {
 	defer db.ddb.mu.Unlock()
 
 	db.ddb.Store[key] = &Data{
-		ID: uuid.New(),
-		Data: value,
+		ID:        uuid.New(),
+		Data:      value,
 		WriteTime: time.Now(),
 	}
-	return key,value
+	return key, value
 }
 
 func (db *Db) Delete(key string) error {
@@ -54,20 +54,19 @@ func (db *Db) Dropdata() {
 
 }
 
-
 func (db *Db) Setttl(key string, ttl int) error {
 	db.tdb.mu.Lock()
 	defer db.tdb.mu.Unlock()
 
 	data, err := db.Get(key)
 	if err != nil {
-		fmt.Println("Data not found"+err.Error())
+		fmt.Println("Data not found" + err.Error())
 		return err
 	}
 	ttlData := &TTL{
-		key: key,
+		key:  key,
 		Data: data,
-		ttl: time.Now().Add(time.Duration(ttl) * time.Second),
+		ttl:  time.Now().Add(time.Duration(ttl) * time.Second),
 	}
 	db.tdb.Store[key] = ttlData
 	db.link.Add(ttlData)
@@ -94,25 +93,25 @@ func (db *Db) Rmttl(key string) error {
 		return errors.New("data not found")
 	}
 	delete(db.tdb.Store, key)
-	fmt.Println("Deleted key from ttl db: "+key)
+	fmt.Println("Deleted key from ttl db: " + key)
 	return nil
 }
 
-func (db *Db) Updatettldb(key string, ttl int)string {
+func (db *Db) Updatettldb(key string, ttl int) string {
 	db.tdb.mu.Lock()
 	defer db.tdb.mu.Unlock()
 	db.tdb.Store[key].ttl = time.Now().Add(time.Duration(ttl) * time.Second)
 	db.link.Delete(key)
 	db.link.Add(db.tdb.Store[key])
-	return "TTL updated for key: "+key +" to "+ strconv.Itoa(ttl)
+	return "TTL updated for key: " + key + " to " + strconv.Itoa(ttl)
 
 }
 
 func (db *Db) RemoveTTL(key string) string {
-	fmt.Println("Removing ttl for key: "+key)
+	fmt.Println("Removing ttl for key: " + key)
 	db.Rmttl(key)
 	db.link.Delete(key)
-	return "TTL removed for key: "+key
+	return "TTL removed for key: " + key
 }
 
 func (db *Db) DropDb() {
@@ -122,7 +121,7 @@ func (db *Db) DropDb() {
 	db.link.Tail = nil
 }
 
-func (db *Db) Keys() []string{
+func (db *Db) Keys() []string {
 	result := make([]string, 0)
 	for key := range db.ddb.Store {
 		result = append(result, key)
