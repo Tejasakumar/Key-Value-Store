@@ -1,7 +1,7 @@
 package QueryInterface
 
 import (
-	"KVS/Storage"
+	"KVS/src/internal/Storage"
 	"fmt"
 	"strings"
 )
