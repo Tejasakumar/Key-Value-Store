@@ -1,42 +1,24 @@
 package main
 
 import (
-	"KVS/src/internal/QueryInterface"
-	"bufio"
+	"KVS/src/internal/server"
+	"flag"
 	"fmt"
-	"os"
-	"strings"
 )
 
 func main() {
-	masterEngine := QueryInterface.GetMasterEngine()
-	scanner := bufio.NewScanner(os.Stdin)
-	engine := QueryInterface.NewQueryExecutionEngine(masterEngine)
+	// Parse command line flags
+	var (
+		port = flag.String("port", "8080", "Port to listen on")
+		host = flag.String("host", "0.0.0.0", "Host address to bind to")
+	)
+	flag.Parse()
 
-	fmt.Println("Interactive Input Processor")
-	fmt.Println("Type 'exit' to quit")
-
-	for {
-		fmt.Print("> ")
-		if scanner.Scan() {
-			userInput := scanner.Text()
-
-			if strings.ToLower(userInput) == "exit" {
-				fmt.Println("Goodbye!")
-				break
-			}
-			query, err := QueryInterface.ParseQuery(userInput)
-			if err != nil {
-				fmt.Println(err)
-				continue
-			}
-			result := engine.Execute(query)
-			fmt.Println(result)
-		} else {
-			if err := scanner.Err(); err != nil {
-				fmt.Fprintf(os.Stderr, "Error reading input: %v\n", err)
-			}
-			break
-		}
-	}
+	// Format the address string
+	address := fmt.Sprintf("%s:%s", *host, *port)
+	
+	fmt.Printf("Starting Key-Value Store TCP server on %s\n", address)
+	
+	// Start the server
+	server.StartServer(address)
 }

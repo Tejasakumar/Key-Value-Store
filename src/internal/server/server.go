@@ -1,7 +1,7 @@
 package server
 
 import (
-	"KVS/QueryInterface"
+	"KVS/src/internal/QueryInterface"
 	"bufio"
 	"log"
 	"net"
