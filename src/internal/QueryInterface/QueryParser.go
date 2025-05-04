@@ -19,6 +19,7 @@ const (
 	GetTTL
 	Put
 	Get
+	GetAll
 	Delete
 	List
 	RemoveTTL
@@ -120,6 +121,12 @@ func ParseQuery(input string) (Query, error) {
 		query.Type = Get
 		query.Key = originalParts[1]
 
+	case "getall":
+		if len(parts) != 1 {
+			return query, errors.New("invalid command. Usage: getall")
+		}
+		query.Type = GetAll
+
 	case "delete":
 		if len(parts) != 2 {
 			return query, errors.New("invalid input. Usage: delete <key>")
@@ -177,6 +184,8 @@ func (c CommandType) String() string {
 		return "Put"
 	case Get:
 		return "Get"
+	case GetAll:
+		return "GetAll"
 	case Delete:
 		return "Delete"
 	case List:

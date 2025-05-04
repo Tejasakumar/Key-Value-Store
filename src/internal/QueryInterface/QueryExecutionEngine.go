@@ -72,6 +72,9 @@ func (e *QueryExecutionEngine) Execute(query Query) string {
 	case Get:
 		return e.get(db, query.Key)
 
+	case GetAll:
+		return e.getAll(db)
+
 	case Delete:
 		return e.delete(db, query.Key)
 
@@ -186,6 +189,18 @@ func (e *QueryExecutionEngine) get(db *Storage.Db, key string) string {
 		return fmt.Sprintf("Error: %s", err.Error())
 	}
 	return fmt.Sprintf("Value for '%s': %v", key, value.Data)
+}
+
+func (e *QueryExecutionEngine) getAll(db *Storage.Db) string {
+	store, err := db.GetAll()
+	if err != nil {
+		return fmt.Sprintf("Error: %s", err.Error())
+	}
+	outputStr := ""
+	for key, val := range store {
+		outputStr += fmt.Sprintf("%s: %v\n", key, val.Data)
+	}
+	return outputStr
 }
 
 // delete removes a key-value pair

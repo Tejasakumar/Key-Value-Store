@@ -18,6 +18,10 @@ func (db *Db) Get(key string) (*Data, error) {
 	return data, nil
 }
 
+func (db *Db) GetAll() (map[string]*Data, error) {
+	return db.ddb.Store, nil
+}
+
 func (db *Db) Put(key string, value interface{}) (string, interface{}) {
 	db.ddb.mu.Lock()
 	defer db.ddb.mu.Unlock()
