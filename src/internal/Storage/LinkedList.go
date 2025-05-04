@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	
 )
 
 type Node struct {
@@ -109,7 +110,8 @@ func (l *LinkedList) AutoSweep(ttldb *TTLDB, db *Db) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 	for temp != nil && temp.Value.ttl.Before(time.Now()) { // as long as a node's TTL has expired, iterate through and delete the elements from the map and the linked list
-		go db.Rmttl(temp.Value.key)
+		db.Rmttl(temp.Value.key)
+		db.Delete(temp.Value.key)
 		temp.Value.Data = nil
 		temp = temp.Next
 	}
