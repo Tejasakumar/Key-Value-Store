@@ -71,7 +71,7 @@ func (e *QueryExecutionEngine) Execute(query Query) string {
 
 	case Get:
 		return e.get(db, query.Key)
-	
+
 	case GetAll:
 		return e.getAll(db)
 

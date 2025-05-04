@@ -120,7 +120,7 @@ func ParseQuery(input string) (Query, error) {
 		}
 		query.Type = Get
 		query.Key = originalParts[1]
-	
+
 	case "getall":
 		if len(parts) != 1 {
 			return query, errors.New("invalid command. Usage: getall")
