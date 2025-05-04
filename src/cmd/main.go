@@ -1,7 +1,7 @@
 package main
 
 import (
-	"KVS/QueryInterface"
+	"KVS/src/internal/QueryInterface"
 	"bufio"
 	"fmt"
 	"os"
