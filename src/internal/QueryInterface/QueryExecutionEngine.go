@@ -8,7 +8,7 @@ import (
 
 // QueryExecutionEngine handles the execution of parsed queries
 type QueryExecutionEngine struct {
-	MasterEngine *MasterEngine
+	MasterEngine  *MasterEngine
 	CurrentDBName string
 }
 
@@ -22,7 +22,7 @@ func NewQueryExecutionEngine(me *MasterEngine) *QueryExecutionEngine {
 
 func Replicate(Engine *QueryExecutionEngine) *QueryExecutionEngine {
 	return &QueryExecutionEngine{
-		MasterEngine:  Engine.MasterEngine, 
+		MasterEngine:  Engine.MasterEngine,
 		CurrentDBName: Engine.CurrentDBName,
 	}
 }

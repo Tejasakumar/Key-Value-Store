@@ -8,11 +8,11 @@ import (
 
 type Node struct {
 	Value *TTL
-	Next *Node
+	Next  *Node
 }
 
 type LinkedList struct {
-	mu sync.RWMutex
+	mu   sync.RWMutex
 	Head *Node
 	Tail *Node
 }
@@ -24,12 +24,12 @@ func GetHead() *LinkedList {
 func (l *LinkedList) Add(data *TTL) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	if (l.Head == nil) {
+	if l.Head == nil {
 		l.Head = &Node{Value: data}
 		l.Tail = l.Head
-	} else if(l.Head.Value.ttl.After(data.ttl)){
+	} else if l.Head.Value.ttl.After(data.ttl) {
 		l.Head = &Node{Value: data, Next: l.Head}
-	}else if(l.Tail.Value.ttl.Before(data.ttl)){
+	} else if l.Tail.Value.ttl.Before(data.ttl) {
 		l.Tail.Next = &Node{Value: data}
 		l.Tail = l.Tail.Next
 	} else {
@@ -51,14 +51,14 @@ func (l *LinkedList) Delete(key string) {
 		l.Head = nil
 		l.Tail = nil
 		return
-	} else if (temp.Value.key == key) {
+	} else if temp.Value.key == key {
 		l.Head = temp.Next
 		temp.Next = nil
 		temp = nil
 		return
 	}
 	for temp != nil && temp.Next != nil {
-		fmt.Println("Checking if key: "+key+" is in linked list")
+		fmt.Println("Checking if key: " + key + " is in linked list")
 		if temp.Next.Value.key == key {
 			val := temp.Next
 			temp.Next = temp.Next.Next
@@ -71,7 +71,7 @@ func (l *LinkedList) Delete(key string) {
 		}
 		temp = temp.Next
 	}
-	
+
 }
 
 func (db *Db) List() map[string]string {
@@ -97,7 +97,7 @@ func (db *Db) DropLink() {
 func (l *LinkedList) Sweep(ttldb *TTLDB, db *Db) {
 	for {
 		l.AutoSweep(ttldb, db)
-		time.Sleep(time.Millisecond* 500)
+		time.Sleep(time.Millisecond * 500)
 	}
 }
 func (l *LinkedList) AutoSweep(ttldb *TTLDB, db *Db) {

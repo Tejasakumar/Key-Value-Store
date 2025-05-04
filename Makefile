@@ -12,3 +12,8 @@ run: build
 
 clean: 
 	rm -rf $(BUILD_DIR) 
+
+.PHONY: format
+
+format:
+		gofmt -w .

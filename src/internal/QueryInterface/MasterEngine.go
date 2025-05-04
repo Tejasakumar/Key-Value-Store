@@ -8,7 +8,7 @@ import (
 //master engine manages the list of all dbs
 
 type MasterEngine struct {
-	DBs map[string]*Storage.Db
+	DBs  map[string]*Storage.Db
 	Lock sync.RWMutex
 }
 
@@ -18,11 +18,11 @@ func (me *MasterEngine) AddDB(name string) {
 	me.DBs[name] = Storage.GetDb(name)
 }
 
-func (me *MasterEngine) GetDB(name string) (*Storage.Db,bool) {
+func (me *MasterEngine) GetDB(name string) (*Storage.Db, bool) {
 	me.Lock.RLock()
 	defer me.Lock.RUnlock()
-	db,ok := me.DBs[name]
-	return db,ok
+	db, ok := me.DBs[name]
+	return db, ok
 }
 
 func (me *MasterEngine) DeleteDB(name string) {
@@ -33,7 +33,7 @@ func (me *MasterEngine) DeleteDB(name string) {
 
 func GetMasterEngine() *MasterEngine {
 	return &MasterEngine{
-		DBs: make(map[string]*Storage.Db),
+		DBs:  make(map[string]*Storage.Db),
 		Lock: sync.RWMutex{},
 	}
 }
