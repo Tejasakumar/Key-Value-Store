@@ -111,54 +111,6 @@ Switched to database: default
 Goodbye!
 ```
 
-## 🔧 Implementation Details
-
-KVS is built with simplicity and efficiency in mind:
-
-- **Main.go**: Contains the interactive CLI interface
-- **Storage package**: Implements the core database functionality
-  - 🗃️ In-memory key-value storage
-  - ⏲️ TTL management with automatic expiration
-  - 📚 Multiple database support
-
-## 📊 Memory Usage
-
-KVS is designed to be memory-efficient:
-
-- **Memory Usage Summary**:
-~1.1-1.5x overhead ratio for typical usage (16-64 byte keys, 32-512 byte values), with random access times of 0.09-0.47 μs per operation.
-
-- **Scalability**: Efficient for both small and large values
-- **Management**: Automatic garbage collection via Go runtime
-
-## ⚠️ Limitations
-
-- **Persistence**: Currently in-memory only with no disk storage
-- **Concurrency**: The CLI version is single-threaded
-- **Advanced features**: No support for complex queries or transactions
-
-## 🧩 Extending KVS
-
-The core Storage package can be used as a library in other Go applications:
-
-```go
-import "KVS/Storage"
-
-func main() {
-    // Get a database instance
-    db := Storage.GetDb("db")
-    
-    // Store a value
-    db.Put("key", "value")
-    
-    // Retrieve the stored value
-    value, err := db.Get("key")
-    if err == nil {
-        fmt.Println(value.Data)
-    }
-}
-```
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

@@ -61,3 +61,4 @@ Thumbs.db
 test.go
 .pre-commit-config.yaml
 go.sum
+trufflehog/
